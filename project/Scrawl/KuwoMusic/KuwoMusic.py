@@ -17,8 +17,7 @@ class KuwoMusic(object):
     '''
     re_dict = copy.deepcopy(RetDataModule.mod_search)
     def __init__(self):
-        self.baseurl = "http://search.kuwo.cn/r.s?all=%s&ft=music&itemset=web_2013&client=kt&pn=%s&rn=%s&rformat=\
-                json&encoding=utf8"
+        self.baseurl = "http://search.kuwo.cn/r.s?all=%s&ft=music&itemset=web_2013&client=kt&pn=%s&rn=%s&rformat=json&encoding=utf8"
         self.palyurl = "http://antiserver.kuwo.cn/anti.s?type=convert_url&rid=%s&format=aac|mp3&response=url"
         self.imageurl = "http://artistpicserver.kuwo.cn/pic.web?type=big_artist_pic&pictype=url&content=list&&id=0&name=&rid=%s&from=pc&json=1&version=1&width=1366&height=768"
         self.commiturl = "http://comment.kuwo.cn/com.s?type=get_comment&uid=0&prod=newWeb&digest=15&sid=%s&page=1&rows=10&f=web"
@@ -73,11 +72,13 @@ class KuwoMusic(object):
     def get_lyric(self,music_id):
         re_dict = copy.deepcopy(RetDataModule.mod_song)
 
-
-        resp = requests.get(url='http://www.kuwo.cn/yinyue/{0}}?catalog=yueku2016,headers=self.headers'.format(music_id)).text
-        head = resp.find('var lrcList')
-        end = resp.find('] || []')
-        lyric = resp[head+15:end]
+        try:
+            resp = requests.get(url='http://www.kuwo.cn/yinyue/{0}}?catalog=yueku2016,headers=self.headers'.format(music_id)).text
+            head = resp.find('var lrcList')
+            end = resp.find(' || []')
+            lyric = resp[head+14:end]
+        except:
+            lyric = "SRY! The song has no lyric for now"
         return lyric
 
     def get_image(self,music_id):
@@ -98,7 +99,7 @@ if __name__=="__main__":
 
     test = KuwoMusic()
 
-    rest.Search_List("青花瓷",1,10)
+    rest.Search_List("青花瓷",1)
 
 
 
